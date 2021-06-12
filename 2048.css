@@ -1,0 +1,99 @@
+body { 
+    background-color: beige;
+    justify-content: center
+}
+
+#board {
+    display:flex;
+    justify-content: center
+}
+.typewriter h3 {
+    color: red;
+    margin: 2vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bolder;
+    font-size: 10vh;
+    overflow: hidden; /* Ensures the content is not revealed until the animation */
+    border-right: .15em solid orange; /* The typwriter cursor */
+    white-space: nowrap; /* Keeps the content on a single line */
+    letter-spacing: .15em; /* Adjust as needed */
+    animation: 
+      typing 5s steps(40, end),
+      blink-caret .5s step-end infinite;
+  }
+
+.nav1 {
+    width: 50%
+}
+
+.nav2 {
+    width:50%; 
+    display: flex; 
+    justify-content: space-around; 
+    align-items: center
+}
+  /* The typing effect */
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  /* The typewriter cursor effect */
+  @keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: orange }
+  }
+
+
+
+.grid {
+    display: flex;
+    border-radius: 2vh;
+    flex-wrap: wrap;
+    width: 90vh;
+    height: 90vh;
+    background-color: rgb(158, 142, 132);
+}
+
+.grid div {
+    display: flex;
+    width: 20vh;
+    height: 20vh;
+    color: #e7e7e7;
+    background: #f0ca20;
+    font-size: 12vh;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    font-weight: bold;
+    margin : 1.2vh;
+    border-radius: 3vh;
+}
+
+.score-container, #result {
+    display: flex;
+    flex-direction: row;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10vh
+}
+
+#score {
+    width: 50vh
+}
+
+button {
+    height: 10vh;
+    width:90vh;
+    border-radius: 3vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 6vh;
+    background-color: orange;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+#button {
+    display:flex;
+    justify-content: center;
+}
