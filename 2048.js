@@ -2,17 +2,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     const gridDisplay = document.querySelector ('.grid')
     const scoreDisplay = document.getElementById('score')
-    const resultDisplay = document.getElementById('result')
     const width = 4
     let squares = []
     let score = 0
-
+    const modal_container = document.getElementById('modal-container')
+    const restart = document.getElementById('restart');
 document.getElementById('play').addEventListener('click', createBoard)
 
 
 //create a playing board
 function createBoard () {
-    for(let i=0; i < width*width; i++) {
+    for(let i=0; i < 16; i++) {
         square = document.createElement('div')
         square.innerHTML = 0
         gridDisplay.appendChild(square)
@@ -20,8 +20,10 @@ function createBoard () {
     }
     generate()
     generate()
+    hidethenumber()
+    document.addEventListener('keyup',control)
+    document.getElementById('play').removeEventListener('click',createBoard)
 }  
-
 
 //generate a number randomly
 function generate() {
@@ -32,6 +34,59 @@ function generate() {
     } else generate()
 }
 
+//make the zeros become hidden 
+function hidethenumber() {
+    for (let i=0; i<16; i++){
+    if (squares[i].innerHTML==0){
+        squares[i].innerHTML = ''
+        squares[i].style.backgroundColor = 'rgb(204, 192, 178)'
+        }else if (squares[i].innerHTML==2){
+            squares[i].style.backgroundColor='rgb(238, 228, 218)'
+            squares[i].style.color ='rgb(119, 110, 101)'
+            squares[i].style.fontSize = '11vh'
+        }else if (squares[i].innerHTML==4){
+            squares[i].style.backgroundColor='rgb(236, 224, 200)'
+            squares[i].style.color='rgb(119, 110, 101)'
+            squares[i].style.fontSize = '11vh'
+        }else if (squares[i].innerHTML==8){
+            squares[i].style.backgroundColor='rgb(242, 177, 121)'
+            squares[i].style.color = 'rgb(249, 246, 241)'
+            squares[i].style.fontSize = '11vh'
+        }else if (squares[i].innerHTML==16){
+            squares[i].style.backgroundColor='rgb(245, 149, 99)'
+            squares[i].style.color = 'rgb(249, 246, 241)'  
+            squares[i].style.fontSize = '11vh'         
+        }else if (squares[i].innerHTML==32){
+            squares[i].style.backgroundColor='rgb(245, 124, 95)'
+            squares[i].style.color = 'rgb(249, 246, 241)'  
+            squares[i].style.fontSize = '11vh'      
+        }else if (squares[i].innerHTML==64){
+            squares[i].style.backgroundColor='rgb(246, 93, 59)'
+            squares[i].style.color = 'rgb(249, 246, 241)'
+            squares[i].style.fontSize = '11vh'   
+        }else if (squares[i].innerHTML==128){
+            squares[i].style.backgroundColor='rgb(237, 206, 113)'
+            squares[i].style.color = 'rgb(249, 246, 241)'  
+            squares[i].style.fontSize = '9vh'
+        }else if (squares[i].innerHTML==256){
+            squares[i].style.backgroundColor='rgb(237, 204, 97)'
+            squares[i].style.color = 'rgb(249, 246, 241)' 
+            squares[i].style.fontSize = '9vh'
+        }else if (squares[i].innerHTML==512){
+            squares[i].style.backgroundColor='rgb(236, 200, 80)'
+            squares[i].style.color = 'rgb(249, 246, 241)'
+            squares[i].style.fontSize = '9vh'
+        }else if (squares[i].innerHTML==1024){
+            squares[i].style.backgroundColor='rgb(236, 200, 80)'
+            squares[i].style.color = 'rgb(237, 197, 63)'
+            squares[i].style.fontSize = '7vh'
+        } else if (squares[i].innerHTML==2048){
+            squares[i].style.backgroundColor='rgb(245, 199, 44)'
+            squares[i].style.color = 'rgb(237, 197, 63)'
+            squares[i].style.fontSize = '7vh'
+        } 
+    }
+}
 
 //swipe right
 function moveRight(){
@@ -42,7 +97,7 @@ function moveRight(){
             let totalThree = squares[i+2].innerHTML
             let totalFour = squares[i+3].innerHTML
             let row = [parseInt(totalOne), parseInt(totalTwo), parseInt(totalThree), parseInt(totalFour)]
-        //console.log(row)
+        //onsole.log(row)
             let filteredRow = row.filter(num => num)
         //console.log(filteredRow)
             let missing = 4 - filteredRow.length
@@ -163,16 +218,18 @@ function combineColumn() {
 function control(e) {
     if (e.keyCode ===39){
         keyRight()
+        hidethenumber()
     } else if (e.keyCode === 37){
         keyLeft()
+        hidethenumber()
     } else if (e.keyCode === 38){
         keyUp()
+        hidethenumber()
     } else if (e.keyCode === 40){
         keyDown()
+        hidethenumber()
     }
 }
-document.addEventListener('keyup',control)
-
 
 function keyRight() {
     moveRight()
@@ -207,24 +264,174 @@ function keyUp() {
 function checkForWin() {
     for (let i=0; i<squares.length; i++) {
         if (squares[i].innerHTML == 2048) {
-            resultDisplay.innerHTML='YOU WIN!'
+            winAlert()
             document.removeEventListener('keyup',control)
         }
     }
 }
 
-// check if there are no zeros on the board to lose
+// check if there are no moves on the board to lose
 function checkForGameOver() {
     let zeros = 0
+    let err = 0
     for (let i=0; i<squares.length; i++) {
         if (squares[i].innerHTML==0){
             zeros++
         }
     }
     if (zeros===0) {
-        resultDisplay.innerHTML = 'YOU LOSE!'
-        document.removeEventListener('keyup',control)
-    }
+    for (let i=0; i<squares.length; i++){    
+        if (i==0
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML){
+            console.log('1')
+            err = err +1
+        }
+        if (i==1
+            &&squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML){
+            err = err +1
+            console.log('2')
+        }
+        if (i==2
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML){
+            console.log('3')
+            err = err +1
+        }
+        if (i==3
+            && squares[i].innerHTML!== squares[i-1]
+            && squares[i].innerHTML !== squares[i+width].innerHTML){
+            console.log('4')
+            err = err +1
+        }
+        if (i==4
+            && squares[i].innerHTML!== squares[i+1]
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('5')
+            err = err +1
+        }
+        if(i==5
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('6')
+            err = err +1
+        }
+        if(i==6
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('7')
+            err = err +1
+        }
+        if (i==7
+            && squares[i].innerHTML!== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('8')
+            err = err +1
+        }
+        if (i==8
+            && squares[i].innerHTML!== squares[i+1]
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('9')
+            err = err +1
+            }
+        if (i==9
+            && squares[i].innerHTML !== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('10')
+            err = err +1
+        }
+        if (i==10
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('11')
+            err = err +1
+            }
+        if (i==11
+            && squares[i].innerHTML!== squares[i-1].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML
+            && squares[i].innerHTML !== squares[i+width].innerHTML){
+            console.log('12')
+            err = err +1
+        }
+        if (i==12
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML !== squares[i-width].innerHTML){
+            console.log('13')
+            err = err +1
+        }
+        if (i==13
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML!== squares[i-1].innerHTML
+            && squares[i].innerHTML!== squares[i-width].innerHTML){
+            console.log('14')
+            err = err +1
+        }
+        if (i==14
+            && squares[i].innerHTML!== squares[i+1].innerHTML
+            && squares[i].innerHTML!== squares[i-1].innerHTML
+            && squares[i].innerHTML!== squares[i-width].innerHTML){
+            console.log('15')
+            err = err +1    
+        }
+        if (i==15
+            && squares[i].innerHTML!== squares[i-1].innerHTML
+            && squares[i].innerHTML!== squares[i-width].innerHTML){
+            console.log('16')
+            err = err +1
+        }
+        console.log(err)
+        if (err ===16){
+            gameOveralert()
+        }
+    }}                               
+}
+
+function gameOveralert() {
+    document.getElementById('win-result').innerHTML = '😢YOU LOSE!😢'
+    document.getElementById('score-result').innerHTML = 'Your score is: ' + score
+    document.removeEventListener('keyup',control)
+    modal_container.classList.add('show');
+    restart.addEventListener('click', () => {
+    modal_container.classList.remove('show');
+    restartgame()
+    })
+}
+
+function winAlert() {
+    document.getElementById('win-result').innerHTML = '😎YOU WIN!😎'
+    document.getElementById('score-result').innerHTML = 'Your score is: ' + score
+    document.removeEventListener('keyup',control)
+    modal_container.classList.add('show');
+    restart.addEventListener('click', () => {
+    modal_container.classList.remove('show')
+    restartgame()
+    })
+}
+
+function restartgame() {
+    for (let i=0; i<squares.length; i++){
+        squares[i].innerHTML = ''
+        }
+    generate()
+    generate()
+    hidethenumber()
+    document.addEventListener('keyup',control)
+    score = 0
+    scoreDisplay.innerHTML = score
 }
 
 })
