@@ -79,11 +79,11 @@ function hidethenumber() {
         }else if (squares[i].innerHTML==1024){
             squares[i].style.backgroundColor='rgb(236, 200, 80)'
             squares[i].style.color = 'rgb(237, 197, 63)'
-            squares[i].style.fontSize = '7vh'
+            squares[i].style.fontSize = '6vh'
         } else if (squares[i].innerHTML==2048){
             squares[i].style.backgroundColor='rgb(245, 199, 44)'
             squares[i].style.color = 'rgb(237, 197, 63)'
-            squares[i].style.fontSize = '7vh'
+            squares[i].style.fontSize = '6vh'
         } 
     }
 }
