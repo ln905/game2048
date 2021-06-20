@@ -82,17 +82,6 @@ button {
       blink-caret .5s step-end infinite;
   }
 
-.nav1 {
-    width: 50%
-}
-
-.nav2 {
-    width:50%; 
-    display: flex; 
-    justify-content: space-around; 
-    align-items: center
-}
-
   @keyframes typing {
     from { width: 0 }
     to { width: 100% }
