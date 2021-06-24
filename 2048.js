@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const width = 4
     let squares = []
     let score = 0
+    var winAudio = new Audio("WinGameAudio.wav");
+    var loseAudio = new Audio("LoseGameAudio.wav");
+    var moveAudio = new Audio("MoveGameAudio.wav");
+    var startAudio = new Audio("StartGameAudio.wav");
     const modal_container = document.getElementById('modal-container')
     const restart = document.getElementById('restart');
 document.getElementById('play').addEventListener('click', createBoard)
@@ -21,6 +25,7 @@ function createBoard () {
     generate()
     generate()
     hidethenumber()
+    startAudio.play()
     document.addEventListener('keyup',control)
     document.getElementById('play').removeEventListener('click',createBoard)
 }  
@@ -232,6 +237,7 @@ function control(e) {
 }
 
 function keyRight() {
+    moveAudio.play()
     moveRight()
     combineRow()
     moveRight()
@@ -239,6 +245,7 @@ function keyRight() {
 }
 
 function keyLeft() {
+    moveAudio.play()
     moveLeft()
     combineRow()
     moveLeft()
@@ -246,6 +253,7 @@ function keyLeft() {
 }
 
 function keyDown() {
+    moveAudio.play()
     moveDown()
     combineColumn()
     moveDown()
@@ -253,6 +261,7 @@ function keyDown() {
 }
 
 function keyUp() {
+    moveAudio.play()
     moveUp()
     combineColumn()
     moveUp()
@@ -265,6 +274,7 @@ function checkForWin() {
     for (let i=0; i<squares.length; i++) {
         if (squares[i].innerHTML == 2048) {
             winAlert()
+            winAudio.play()
             document.removeEventListener('keyup',control)
         }
     }
@@ -396,6 +406,7 @@ function checkForGameOver() {
         console.log(err)
         if (err ===16){
             gameOveralert()
+            loseAudio.play()
         }
     }}                               
 }
@@ -429,6 +440,7 @@ function restartgame() {
     generate()
     generate()
     hidethenumber()
+    startAudio.play()
     document.addEventListener('keyup',control)
     score = 0
     scoreDisplay.innerHTML = score
