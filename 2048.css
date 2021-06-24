@@ -82,6 +82,7 @@ button {
       blink-caret .5s step-end infinite;
   }
 
+
   @keyframes typing {
     from { width: 0 }
     to { width: 100% }
