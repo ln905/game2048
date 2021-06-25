@@ -4,10 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreDisplay = document.getElementById('score')
     const width = 4
     let squares = []
+    let squaresCopy = []
     let score = 0
     var winAudio = new Audio("WinGameAudio.wav");
     var loseAudio = new Audio("LoseGameAudio.wav");
-    var moveAudio = new Audio("MoveGameAudio.wav");
+    var moveAudio = new Audio("MoveGameAudio.mp3");
     var startAudio = new Audio("StartGameAudio.wav");
     const modal_container = document.getElementById('modal-container')
     const restart = document.getElementById('restart');
@@ -34,8 +35,7 @@ function createBoard () {
 function generate() {
     let randomNumber = Math.floor(Math.random() * squares.length)
     if (squares[randomNumber].innerHTML == 0) {
-        squares[randomNumber].innerHTML = 2
-        checkForGameOver()
+        squares[randomNumber].innerHTML =  2
     } else generate()
 }
 
@@ -93,6 +93,7 @@ function hidethenumber() {
     }
 }
 
+
 //swipe right
 function moveRight(){
     for (let i=0; i<16; i++){
@@ -119,8 +120,6 @@ function moveRight(){
     }
 }
 
-
-//swipe left
 function moveLeft(){
     for (let i=0; i<16; i++){
         if (i%4===0){
@@ -145,8 +144,6 @@ function moveLeft(){
     }
 }
 
-
-//swipe down
 function moveDown(){
     for (let i=0; i<4; i++){
         let totalOne = squares[i].innerHTML
@@ -167,8 +164,6 @@ function moveDown(){
     }
 }
 
-
-//swipe dup
 function moveUp(){
     for (let i=0; i<4; i++){
         let totalOne = squares[i].innerHTML
@@ -191,12 +186,44 @@ function moveUp(){
 
 
 //combine
-function combineRow() {
-    for (let i = 0; i < 15; i++) {
-        if (squares[i].innerHTML === squares[i+1].innerHTML){
-            let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+1].innerHTML)
+function combineRight() {
+    for (let i = 14; i >= 0; i--) {
+        if (i!==3 && i!==7 && i!==11){
+            if (squares[i].innerHTML === squares[i+1].innerHTML){
+                let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+1].innerHTML)
+                squares[i].innerHTML = combinedTotal
+                squares[i+1].innerHTML = 0
+                //score
+                score += combinedTotal
+                scoreDisplay.innerHTML = score
+            }
+        }
+    }
+    checkForWin()
+}
+
+function combineLeft() {
+    for (let i = 1; i < 16; i++) {
+        if (i!==4 && i!==8 && i!==12){
+            if (squares[i].innerHTML === squares[i-1].innerHTML){
+                let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i-1].innerHTML)
+                squares[i].innerHTML = combinedTotal
+                squares[i-1].innerHTML = 0
+                //score
+                score += combinedTotal
+                scoreDisplay.innerHTML = score
+            }
+        }
+    }
+    checkForWin()
+}
+
+function combineUp() {
+    for (let i = 0; i < 12; i++) {
+        if (squares[i].innerHTML === squares[i+width].innerHTML){
+            let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+width].innerHTML)
             squares[i].innerHTML = combinedTotal
-            squares[i+1].innerHTML = 0
+            squares[i+width].innerHTML = 0
             //score
             score += combinedTotal
             scoreDisplay.innerHTML = score
@@ -205,8 +232,8 @@ function combineRow() {
     checkForWin()
 }
 
-function combineColumn() {
-    for (let i = 0; i < 12; i++) {
+function combineDown(){
+    for (let i = 11; i >= 0; i--) {
         if (squares[i].innerHTML === squares[i+width].innerHTML){
             let combinedTotal = parseInt(squares[i].innerHTML) + parseInt(squares[i+width].innerHTML)
             squares[i].innerHTML = combinedTotal
@@ -239,32 +266,33 @@ function control(e) {
 function keyRight() {
     moveAudio.play()
     moveRight()
-    combineRow()
+    combineRight()
     moveRight()
+    checkForGameOver()
     generate()
 }
-
 function keyLeft() {
     moveAudio.play()
     moveLeft()
-    combineRow()
+    combineLeft()
     moveLeft()
+    checkForGameOver()
     generate()
 }
-
 function keyDown() {
     moveAudio.play()
     moveDown()
-    combineColumn()
+    combineDown()
     moveDown()
+    checkForGameOver()
     generate()
 }
-
 function keyUp() {
     moveAudio.play()
     moveUp()
-    combineColumn()
+    combineUp()
     moveUp()
+    checkForGameOver()
     generate()
 }
 
@@ -294,7 +322,7 @@ function checkForGameOver() {
         if (i==0
             && squares[i].innerHTML!== squares[i+1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML){
-            console.log('1')
+            //console.log('1')
             err = err +1
         }
         if (i==1
@@ -302,26 +330,26 @@ function checkForGameOver() {
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML){
             err = err +1
-            console.log('2')
+            //console.log('2')
         }
         if (i==2
             && squares[i].innerHTML!== squares[i+1].innerHTML
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML){
-            console.log('3')
+            //console.log('3')
             err = err +1
         }
         if (i==3
             && squares[i].innerHTML!== squares[i-1]
             && squares[i].innerHTML !== squares[i+width].innerHTML){
-            console.log('4')
+            //console.log('4')
             err = err +1
         }
         if (i==4
             && squares[i].innerHTML!== squares[i+1]
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('5')
+            //console.log('5')
             err = err +1
         }
         if(i==5
@@ -329,7 +357,7 @@ function checkForGameOver() {
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('6')
+            //console.log('6')
             err = err +1
         }
         if(i==6
@@ -337,21 +365,21 @@ function checkForGameOver() {
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('7')
+            //console.log('7')
             err = err +1
         }
         if (i==7
             && squares[i].innerHTML!== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('8')
+            //console.log('8')
             err = err +1
         }
         if (i==8
             && squares[i].innerHTML!== squares[i+1]
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('9')
+            //console.log('9')
             err = err +1
             }
         if (i==9
@@ -359,7 +387,7 @@ function checkForGameOver() {
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('10')
+            //console.log('10')
             err = err +1
         }
         if (i==10
@@ -367,40 +395,40 @@ function checkForGameOver() {
             && squares[i].innerHTML !== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('11')
+            //console.log('11')
             err = err +1
             }
         if (i==11
             && squares[i].innerHTML!== squares[i-1].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML
             && squares[i].innerHTML !== squares[i+width].innerHTML){
-            console.log('12')
+            //console.log('12')
             err = err +1
         }
         if (i==12
             && squares[i].innerHTML!== squares[i+1].innerHTML
             && squares[i].innerHTML !== squares[i-width].innerHTML){
-            console.log('13')
+            //console.log('13')
             err = err +1
         }
         if (i==13
             && squares[i].innerHTML!== squares[i+1].innerHTML
             && squares[i].innerHTML!== squares[i-1].innerHTML
             && squares[i].innerHTML!== squares[i-width].innerHTML){
-            console.log('14')
+            //console.log('14')
             err = err +1
         }
         if (i==14
             && squares[i].innerHTML!== squares[i+1].innerHTML
             && squares[i].innerHTML!== squares[i-1].innerHTML
             && squares[i].innerHTML!== squares[i-width].innerHTML){
-            console.log('15')
+            //console.log('15')
             err = err +1    
         }
         if (i==15
             && squares[i].innerHTML!== squares[i-1].innerHTML
             && squares[i].innerHTML!== squares[i-width].innerHTML){
-            console.log('16')
+            //console.log('16')
             err = err +1
         }
         console.log(err)
